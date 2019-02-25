@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Newbe.Claptrap.Abstract.Core;
 using Newbe.Claptrap.Demo.Models;
 
-namespace Newbe.Claptrap.Demo.Impl.AccountImpl
+namespace Newbe.Claptrap.Demo.Impl.AccountImpl.Claptraps
 {
     public class DefaultStateDataDataFactory
         : DefaultStateDataFactory<AccountStateData>

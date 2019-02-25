@@ -3,7 +3,7 @@ using Newbe.Claptrap.Demo.Interfaces;
 using Newbe.Claptrap.Demo.Models;
 using Newbe.Claptrap.Demo.Models.EventData;
 
-namespace Newbe.Claptrap.Demo.Impl.AccountImpl.EventMethods.TransferImpl
+namespace Newbe.Claptrap.Demo.Impl.AccountImpl.Claptraps.EventMethods.TransferImpl
 {
     public class TransferMethod : ITransferMethod
     {

@@ -40,12 +40,12 @@ namespace Newbe.Claptrap.Demo
         {
             ActorType = actorType;
             Catalog = catalog;
-            MinionKind = minionKind;
+            MinionCatalog = minionKind;
         }
 
         public ActorType ActorType { get; }
         public string Catalog { get; }
-        public string MinionKind { get; }
+        public string MinionCatalog { get; }
 
         public bool Equals(IActorKind other)
         {
@@ -60,7 +60,7 @@ namespace Newbe.Claptrap.Demo
         public bool Equals(IMinionKind other)
         {
             return other.Catalog == Catalog &&
-                   other.MinionKind == MinionKind &&
+                   other.MinionCatalog == MinionCatalog &&
                    other.ActorType == ActorType;
         }
     }

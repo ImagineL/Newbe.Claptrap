@@ -1,11 +1,14 @@
 ﻿using System.Threading.Tasks;
 using Newbe.Claptrap.Abstract.Core;
-using Newbe.Claptrap.Abstract.EventHub;
+using Newbe.Claptrap.Abstract.EventChannels;
 
 namespace Newbe.Claptrap.EventHub.Memory
 {
     public class EventPublishChannel : IEventPublishChannel
     {
+
+        public delegate EventPublishChannel Factory();
+        
         private readonly IEventHubManager _eventHubManager;
 
         public EventPublishChannel(

@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Newbe.Claptrap.Abstract.Core;
 using Newbe.Claptrap.Attributes;
+using Newbe.Claptrap.Demo.Impl.AccountImpl.Claptraps;
 using Newbe.Claptrap.Demo.Interfaces;
 using Orleans;
 
@@ -28,9 +29,9 @@ namespace Newbe.Claptrap.Demo.Impl.AccountImpl.Minions.Database
             await Actor.DeactivateAsync();
         }
 
-        public Task Handle(GrainEvent grainEvent)
+        public Task HandleEvent(IEvent @event)
         {
-            return Actor.HandleEvent(grainEvent);
+            return Actor.HandleEvent(@event);
         }
     }
 }

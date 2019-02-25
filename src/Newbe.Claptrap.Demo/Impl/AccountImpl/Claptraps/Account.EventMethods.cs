@@ -1,15 +1,14 @@
-using System;
 using System.Threading.Tasks;
-using Newbe.Claptrap.Abstract;
 using Newbe.Claptrap.Abstract.Core;
-using Newbe.Claptrap.Demo.Impl.AccountImpl.EventMethods.AddBalanceImpl;
-using Newbe.Claptrap.Demo.Impl.AccountImpl.EventMethods.LockImpl;
-using Newbe.Claptrap.Demo.Impl.AccountImpl.EventMethods.TransferImpl;
+using Newbe.Claptrap.Demo.Impl.AccountImpl.Claptraps.EventMethods.AddBalanceImpl;
+using Newbe.Claptrap.Demo.Impl.AccountImpl.Claptraps.EventMethods.LockImpl;
+using Newbe.Claptrap.Demo.Impl.AccountImpl.Claptraps.EventMethods.TransferImpl;
 using Newbe.Claptrap.Demo.Interfaces;
 using Newbe.Claptrap.Demo.Models;
+using Newbe.Claptrap.Demo.Models.EventData;
 using Orleans;
 
-namespace Newbe.Claptrap.Demo.Impl.AccountImpl
+namespace Newbe.Claptrap.Demo.Impl.AccountImpl.Claptraps
 {
     public partial class Account
     {
@@ -35,8 +34,8 @@ namespace Newbe.Claptrap.Demo.Impl.AccountImpl
             var result = await AddBalanceMethod.Invoke((AccountStateData) Actor.State.Data, amount);
             if (result.EventRaising)
             {
-                const string eventType = "BalanceChangeEvent";
-                var @event = new DataEvent(Actor.State.Identity, eventType, result.EventData, result.EventUid);
+                var @event = new DataEvent(Actor.State.Identity, nameof(BalanceChangeEventData), result.EventData,
+                    result.EventUid);
                 await Actor.HandleEvent(@event);
             }
         }
@@ -49,8 +48,8 @@ namespace Newbe.Claptrap.Demo.Impl.AccountImpl
             var result = await TransferMethod.Invoke((AccountStateData) Actor.State.Data, amount);
             if (result.EventRaising)
             {
-                const string eventType = "BalanceChangeEvent";
-                var @event = new DataEvent(Actor.State.Identity, eventType, result.EventData, result.EventUid);
+                var @event = new DataEvent(Actor.State.Identity, nameof(BalanceChangeEventData), result.EventData,
+                    result.EventUid);
                 await Actor.HandleEvent(@event);
             }
 
@@ -65,8 +64,8 @@ namespace Newbe.Claptrap.Demo.Impl.AccountImpl
             var result = await LockMethod.Invoke((AccountStateData) Actor.State.Data);
             if (result.EventRaising)
             {
-                const string eventType = "LockEvent";
-                var @event = new DataEvent(Actor.State.Identity, eventType, result.EventData, result.EventUid);
+                var @event = new DataEvent(Actor.State.Identity, nameof(LockEventData), result.EventData,
+                    result.EventUid);
                 await Actor.HandleEvent(@event);
             }
         }

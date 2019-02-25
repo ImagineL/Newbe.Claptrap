@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newbe.Claptrap.Abstract.Context;
+using Newbe.Claptrap.Abstract.EventChannels;
 using Newbe.Claptrap.Abstract.EventHandler;
-using Newbe.Claptrap.Abstract.EventHub;
 
 namespace Newbe.Claptrap.EventHandlers
 {

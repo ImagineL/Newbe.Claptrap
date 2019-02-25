@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Reflection;
 using Newbe.Claptrap.Abstract.Assemblies;
@@ -27,7 +27,7 @@ namespace Newbe.Claptrap.Autofac.Reflection
                 return;
             }
 
-            var assemblies = _actorAssemblyProviders.Select(x => x.GetAssembly());
+            var assemblies = _actorAssemblyProviders.SelectMany(x => x.GetAssemblies());
             var types = assemblies.SelectMany(x => x.GetTypes());
             var list = new List<ActorReflectionInfo>();
             foreach (var type in types)
@@ -35,21 +35,27 @@ namespace Newbe.Claptrap.Autofac.Reflection
                 var actorAttribute = type.GetCustomAttribute<ActorAttribute>();
                 if (actorAttribute != null)
                 {
-                    var methodList = new Dictionary<string, ActorEventReflectionInfo>();
-                    var claptrapEventAttributes = type.GetCustomAttributes<ClaptrapEventAttribute>();
-                    foreach (var claptrapEventAttribute in claptrapEventAttributes)
-                    {
-                        var eventType = claptrapEventAttribute.EventType;
-                        methodList[eventType] = new ActorEventReflectionInfo
+                    var methodInfos = type.GetMethods();
+                    var methodList = methodInfos.Select(m =>
                         {
-                            EventType = eventType,
-                            EventDataType = claptrapEventAttribute.EventDataType,
-                        };
-                    }
+                            var claptrapEventAttribute = m.GetCustomAttribute<ClaptrapEventAttribute>();
+                            if (claptrapEventAttribute != null)
+                            {
+                                var actorEventReflectionInfo = new ActorEventReflectionInfo(
+                                    claptrapEventAttribute.EventType,
+                                    claptrapEventAttribute.EventDataType);
+                                return actorEventReflectionInfo;
+                            }
+
+                            return null;
+                        })
+                        .Where(x => x != null)
+                        .GroupBy(x => x.EventType)
+                        .ToDictionary(x => x.Key, x => x.First());
 
                     var actorMetadata = new ActorReflectionInfo
                     {
-                        ActorKind = new ReflectionActorKind(actorAttribute.ActorType, actorAttribute.Catalog, type),
+                        ActorKind = new ActorKind(actorAttribute.ActorType, actorAttribute.Catalog),
                         StateDataType = actorAttribute.StateDataType,
                         ActorEventReflectionInfos = methodList.Values,
                     };
@@ -70,50 +76,6 @@ namespace Newbe.Claptrap.Autofac.Reflection
         {
             Init();
             return _metadata;
-        }
-
-        public class ReflectionActorKind : IActorKind
-        {
-            public ActorType ActorType { get; }
-            public string Catalog { get; }
-            public Type ActorClassType { get; }
-
-            public ReflectionActorKind(ActorType actorType, string catalog, Type actorClassType)
-            {
-                ActorType = actorType;
-                Catalog = catalog;
-                ActorClassType = actorClassType;
-            }
-
-            public bool Equals(IActorKind other)
-            {
-                return ActorType == other.ActorType && string.Equals(Catalog, other.Catalog);
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (ReferenceEquals(null, obj)) return false;
-                if (ReferenceEquals(this, obj)) return true;
-                return Equals((IActorKind) obj);
-            }
-
-            public override int GetHashCode()
-            {
-                unchecked
-                {
-                    return ((int) ActorType * 397) ^ (Catalog != null ? Catalog.GetHashCode() : 0);
-                }
-            }
-
-            public static bool operator ==(ReflectionActorKind left, ReflectionActorKind right)
-            {
-                return Equals(left, right);
-            }
-
-            public static bool operator !=(ReflectionActorKind left, ReflectionActorKind right)
-            {
-                return !Equals(left, right);
-            }
         }
     }
 }

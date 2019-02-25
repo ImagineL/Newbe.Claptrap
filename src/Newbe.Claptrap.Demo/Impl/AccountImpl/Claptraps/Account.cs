@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Newbe.Claptrap.Demo.Interfaces;
 using Orleans;
 
-namespace Newbe.Claptrap.Demo.Impl.AccountImpl
+namespace Newbe.Claptrap.Demo.Impl.AccountImpl.Claptraps
 {
     public partial class Account : Grain, IAccount
     {

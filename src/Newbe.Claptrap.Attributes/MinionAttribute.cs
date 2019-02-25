@@ -6,12 +6,12 @@ namespace Newbe.Claptrap.Attributes
     [AttributeUsage(AttributeTargets.Interface)]
     public class MinionAttribute : ActorAttribute
     {
-        public string ClaptrapCatalog { get; }
+        public string MinionCatalog { get; }
 
-        public MinionAttribute(string catalog, string claptrapCatalog, Type stateDataType)
+        public MinionAttribute(string minionCatalog, string catalog, Type stateDataType)
             : base(ActorType.Minion, catalog, stateDataType)
         {
-            ClaptrapCatalog = claptrapCatalog;
+            MinionCatalog = minionCatalog;
         }
     }
 }

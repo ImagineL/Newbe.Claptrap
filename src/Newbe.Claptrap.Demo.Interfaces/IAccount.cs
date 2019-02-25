@@ -2,12 +2,13 @@ using System.Threading.Tasks;
 using Newbe.Claptrap.Attributes;
 using Newbe.Claptrap.Demo.Models;
 using Newbe.Claptrap.Demo.Models.EventData;
+using Newbe.Claptrap.Orleans;
 using Orleans;
 
 namespace Newbe.Claptrap.Demo.Interfaces
 {
     [Claptrap("Account", typeof(AccountStateData))]
-    public interface IAccount : IGrainWithStringKey
+    public interface IAccount : IClaptrapGrain
     {
         [ClaptrapEventMethod(nameof(BalanceChangeEventData), typeof(BalanceChangeEventData))]
         Task AddBalance(decimal amount);

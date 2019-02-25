@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Newbe.Claptrap.Abstract.Core;
-using Newbe.Claptrap.Abstract.EventHub;
+using Newbe.Claptrap.Abstract.EventChannels;
 using Newbe.Claptrap.Orleans;
 using Orleans;
 

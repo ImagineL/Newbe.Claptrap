@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,7 +14,8 @@ namespace Newbe.Claptrap.EventHub.Memory
         private readonly IClaptrapRelationProvider _claptrapRelationProvider;
         private readonly IClusterClient _clusterClient;
 
-        public EventHubManager(IClaptrapRelationProvider claptrapRelationProvider,
+        public EventHubManager(
+            IClaptrapRelationProvider claptrapRelationProvider,
             IClusterClient clusterClient)
         {
             _claptrapRelationProvider = claptrapRelationProvider;
@@ -27,8 +29,9 @@ namespace Newbe.Claptrap.EventHub.Memory
         {
             if (!_dictionary.TryGetValue(@from.Kind, out var block))
             {
-                block = CreateBlock(from.Kind);
-                _dictionary.AddOrUpdate(from.Kind, block, (kind, bufferBlock) => CreateBlock(kind));
+                var newBlock = CreateBlock(from.Kind);
+                _dictionary.AddOrUpdate(from.Kind, newBlock, (kind, bufferBlock) => CreateBlock(kind));
+                block = newBlock;
             }
 
             return block.SendAsync(@event);
@@ -45,7 +48,8 @@ namespace Newbe.Claptrap.EventHub.Memory
             bufferBlock.LinkTo(broadcastBlock);
             foreach (var eventReceiveChannel in eventReceiveChannels)
             {
-                broadcastBlock.LinkTo(new ActionBlock<IEvent>(@event => eventReceiveChannel.Receive(@event)));
+                broadcastBlock.LinkTo(
+                    new ActionBlock<IEvent>(new Func<IEvent, Task>(@event => eventReceiveChannel.Receive(@event))));
             }
 
             return bufferBlock;

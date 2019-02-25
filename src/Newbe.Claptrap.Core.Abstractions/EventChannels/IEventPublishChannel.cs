@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Newbe.Claptrap.Abstract.Core;
 
-namespace Newbe.Claptrap.Abstract.EventHub
+namespace Newbe.Claptrap.Abstract.EventChannels
 {
     public interface IEventPublishChannel
     {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Reflection;
 using Newbe.Claptrap.Abstract.Assemblies;
 
@@ -5,17 +6,17 @@ namespace Newbe.Claptrap.Autofac
 {
     public class ActorAssemblyProvider : IActorAssemblyProvider
     {
-        private readonly Assembly _assembly;
+        private readonly IEnumerable<Assembly> _assemblies;
 
         public ActorAssemblyProvider(
-            Assembly assembly)
+            IEnumerable<Assembly> assemblies)
         {
-            _assembly = assembly;
+            _assemblies = assemblies;
         }
 
-        public Assembly GetAssembly()
+        public IEnumerable<Assembly> GetAssemblies()
         {
-            return _assembly;
+            return _assemblies;
         }
     }
 }

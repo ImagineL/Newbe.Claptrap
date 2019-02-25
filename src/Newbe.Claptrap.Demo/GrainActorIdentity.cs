@@ -1,7 +1,9 @@
+using System.Diagnostics;
 using Newbe.Claptrap.Abstract.Core;
 
 namespace Newbe.Claptrap.Demo
 {
+    [DebuggerDisplay("Kind: {Kind} , Id: {Id}")]
     public class GrainActorIdentity : IActorIdentity
     {
         public GrainActorIdentity(IActorKind kind, string id)
@@ -31,6 +33,11 @@ namespace Newbe.Claptrap.Demo
             {
                 return ((Kind != null ? Kind.GetHashCode() : 0) * 397) ^ (Id != null ? Id.GetHashCode() : 0);
             }
+        }
+
+        public override string ToString()
+        {
+            return $"{nameof(Kind)}: {Kind}, {nameof(Id)}: {Id}";
         }
     }
 }

@@ -72,6 +72,9 @@ namespace Newbe.Claptrap.Demo.Server
             await clusterClient.Connect(exception => Task.FromResult(true));
 
             var containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterType<EventHudReceiverService>()
+                .As<IEventHudReceiverService>()
+                .SingleInstance();
             containerBuilder.RegisterType<EventHubManager>()
                 .As<IEventHubManager>()
                 .SingleInstance();
@@ -89,6 +92,14 @@ namespace Newbe.Claptrap.Demo.Server
         public interface IEventHudReceiverService
         {
             Task Start();
+        }
+
+        private class EventHudReceiverService : IEventHudReceiverService
+        {
+            public Task Start()
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

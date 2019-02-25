@@ -3,9 +3,10 @@ using Newbe.Claptrap.Abstract.Assemblies;
 using Newbe.Claptrap.Autofac;
 using Newbe.Claptrap.Autofac.Reflection;
 using Newbe.Claptrap.Demo.Impl.AccountImpl;
-using Newbe.Claptrap.Demo.Impl.AccountImpl.EventMethods.AddBalanceImpl;
-using Newbe.Claptrap.Demo.Impl.AccountImpl.EventMethods.LockImpl;
-using Newbe.Claptrap.Demo.Impl.AccountImpl.EventMethods.TransferImpl;
+using Newbe.Claptrap.Demo.Impl.AccountImpl.Claptraps;
+using Newbe.Claptrap.Demo.Impl.AccountImpl.Claptraps.EventMethods.AddBalanceImpl;
+using Newbe.Claptrap.Demo.Impl.AccountImpl.Claptraps.EventMethods.LockImpl;
+using Newbe.Claptrap.Demo.Impl.AccountImpl.Claptraps.EventMethods.TransferImpl;
 using Newbe.Claptrap.Demo.Interfaces;
 
 namespace Newbe.Claptrap.Demo
@@ -16,7 +17,6 @@ namespace Newbe.Claptrap.Demo
         {
             base.Load(builder);
             builder.RegisterType<Account>()
-                .PropertiesAutowired()
                 .As<IAccount>();
 
             builder.RegisterType<AddBalanceMethod>()
@@ -26,12 +26,9 @@ namespace Newbe.Claptrap.Demo
             builder.RegisterType<TransferMethod>()
                 .As<ITransferMethod>();
 
-            var assembly = typeof(DemoModule).Assembly;
-            builder.RegisterDefaultStateDataFactories(assembly);
-            builder.RegisterUpdateStateDataHandlers(assembly);
-            builder.Register(context =>
-                    new ActorAssemblyProvider(assembly))
-                .As<IActorAssemblyProvider>();
+            var assemblies = new[] {typeof(IAccount).Assembly, typeof(DemoModule).Assembly};
+            builder.RegisterDefaultStateDataFactories(assemblies);
+            builder.RegisterUpdateStateDataHandlers(assemblies);
         }
     }
 }

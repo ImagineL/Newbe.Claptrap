@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Autofac;
 using Newbe.Claptrap.Abstract.Core;
@@ -30,7 +29,7 @@ namespace Newbe.Claptrap.Autofac
                 return factory.Create();
             }
 
-            throw new ArgumentOutOfRangeException(nameof(ActorIdentity));
+            throw new ClaptrapComponentNotFoundException(ActorIdentity, typeof(IDefaultStateDataFactory));
         }
     }
 }

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Newbe.Claptrap.Abstract.EventHub
+namespace Newbe.Claptrap.Abstract.EventChannels
 {
     public interface IEventHubPublisher
     {

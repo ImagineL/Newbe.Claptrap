@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
@@ -23,12 +24,12 @@ namespace Newbe.Claptrap.Autofac
         }
 
         public static void RegisterUpdateStateDataHandlers(this ContainerBuilder builder,
-            Assembly assembly)
+            IEnumerable<Assembly> assemblies)
         {
-            var provider = new ClaptrapReflectionInfoProvider(new[] {new ActorAssemblyProvider(assembly),});
-            IStateDataUpdaterRegistrationFinder
-                finder = new StateDataUpdaterRegistrationFinder(provider);
-            var allTypes = assembly.GetTypes();
+            var assemblyArray = assemblies as Assembly[] ?? assemblies.ToArray();
+            var provider = new ClaptrapReflectionInfoProvider(new[] {new ActorAssemblyProvider(assemblyArray),});
+            IStateDataUpdaterRegistrationFinder finder = new StateDataUpdaterRegistrationFinder(provider);
+            var allTypes = assemblyArray.SelectMany(x => x.GetTypes()).ToArray();
             var registrations = finder.FindAll(allTypes);
             foreach (var registration in registrations)
             {
@@ -38,10 +39,11 @@ namespace Newbe.Claptrap.Autofac
         }
 
         public static void RegisterDefaultStateDataFactories(this ContainerBuilder builder,
-            Assembly assembly)
+            IEnumerable<Assembly> assemblies)
         {
-            var provider = new ClaptrapReflectionInfoProvider(new[] {new ActorAssemblyProvider(assembly)});
-            var allTypes = assembly.GetTypes();
+            var assemblyArray = assemblies as Assembly[] ?? assemblies.ToArray();
+            var provider = new ClaptrapReflectionInfoProvider(new[] {new ActorAssemblyProvider(assemblyArray)});
+            var allTypes = assemblyArray.SelectMany(x => x.GetTypes()).ToArray();
             IDefaultStateDataFactoryFinder finder = new DefaultStateDataFactoryFinder(provider);
             var registrations = finder.FindAll(allTypes);
             foreach (var registration in registrations)

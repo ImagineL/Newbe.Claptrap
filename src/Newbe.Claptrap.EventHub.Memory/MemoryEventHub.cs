@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Newbe.Claptrap.Abstract.EventHub;
+using Newbe.Claptrap.Abstract.EventChannels;
 
 namespace Newbe.Claptrap.EventHub.Memory
 {

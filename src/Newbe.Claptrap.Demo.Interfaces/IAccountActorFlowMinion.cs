@@ -1,13 +1,12 @@
 using System.Threading.Tasks;
 using Newbe.Claptrap.Attributes;
+using Newbe.Claptrap.Orleans;
 using Orleans;
 
 namespace Newbe.Claptrap.Demo.Interfaces
 {
     [Minion("Database", "Account", typeof(NoneStateData))]
-    [MinionEvent("")]
-    public interface IAccountActorFlowMinion : IGrainWithStringKey
+    public interface IAccountActorFlowMinion : IMinionGrain
     {
-        Task Handle(GrainEvent grainEvent);
     }
 }
